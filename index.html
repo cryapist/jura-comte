@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site en construction</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Georgia', serif;
+      background-color: #1a1a1a;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('photo-jura.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10, 8, 5, 0.35) 0%,
+        rgba(10, 8, 5, 0.55) 100%
+      );
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      color: #fff;
+    }
+
+    .label {
+      display: inline-block;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 220, 140, 0.9);
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      color: #fff;
+      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.4);
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: rgba(255, 220, 140, 0.7);
+      margin: 0 auto 1.5rem;
+    }
+
+    p {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.8);
+      letter-spacing: 0.04em;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="bg"></div>
+    <div class="overlay"></div>
+    <div class="content">
+      <span class="label">Jura &amp; Comté</span>
+      <h1>Site en construction</h1>
+      <div class="divider"></div>
+      <p>Nous travaillons à vous offrir une belle expérience.<br>Revenez bientôt.</p>
+    </div>
+  </section>
+</body>
+</html>

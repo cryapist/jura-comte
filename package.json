@@ -1,0 +1,9 @@
+{
+  "name": "jura-comte-maintenance",
+  "version": "1.0.0",
+  "description": "Page de maintenance Jura Comté",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
