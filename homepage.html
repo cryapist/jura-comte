@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jura Comté · Fromages d'exception, directement livrés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --brown:      #5C433D;
+      --brown-dark: #2B1A14;
+      --brown-mid:  #7A5A52;
+      --cream:      #FAF5EE;
+      --cream-2:    #F0E8D8;
+      --gold:       #D4A843;
+      --gold-2:     #F0C86A;
+      --text:       #1A0F0A;
+      --text-2:     #4A3028;
+      --text-3:     #9A7A70;
+      --white:      #FFFFFF;
+      --nav-h:      68px;
+      --ease:       cubic-bezier(.4,0,.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text-2);
+      background: var(--cream);
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 2rem; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200; height: var(--nav-h);
+      transition: background .4s var(--ease), box-shadow .4s var(--ease);
+    }
+    nav.up {
+      background: rgba(250, 245, 238, 0.96);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(92,67,61,.12);
+    }
+    nav.up .logo-j  { color: var(--text); }
+    nav.up .logo-c  { color: var(--brown); }
+    nav.up .nav-a   { color: var(--text-2); }
+    nav.up .nav-a:hover { color: var(--brown); }
+    nav.up .btn-cta { background: var(--brown); color: var(--white); }
+    nav.up .btn-cta:hover { background: var(--text); }
+    nav.up .ham span { background: var(--text); }
+
+    .nav-in {
+      height: 100%; max-width: 1180px; margin: 0 auto; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { text-decoration: none; line-height: 1; }
+    .logo-j {
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: 1.3rem; letter-spacing: .01em; text-transform: uppercase;
+      color: var(--white); display: block;
+      transition: color .3s;
+    }
+    .logo-c {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 1rem; text-transform: uppercase;
+      color: var(--gold-2); display: block;
+      transition: color .3s;
+    }
+    .nav-ul { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-a {
+      font-size: .82rem; font-weight: 500;
+      color: rgba(255,255,255,.82); text-decoration: none;
+      transition: color .25s;
+    }
+    .nav-a:hover { color: var(--white); }
+    .btn-cta {
+      font-size: .78rem; font-weight: 600;
+      color: var(--brown); background: var(--gold);
+      padding: .55rem 1.25rem; border-radius: 6px; text-decoration: none;
+      transition: background .25s, color .25s, transform .2s;
+    }
+    .btn-cta:hover { background: var(--gold-2); transform: translateY(-1px); }
+
+    .ham {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .ham span { display: block; width: 22px; height: 2px; background: #fff; transition: background .3s; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('photo-jura.webp') center/cover no-repeat;
+      transform: scale(1.06); transition: transform 10s ease;
+    }
+    .hero-bg.go { transform: scale(1); }
+    .hero-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(18,8,4,.5) 0%, rgba(42,20,10,.65) 100%);
+    }
+    .hero-body {
+      position: relative; z-index: 1; text-align: center; padding: 2rem; max-width: 800px;
+    }
+    .hero-tag {
+      display: inline-block; font-size: .7rem; font-weight: 600;
+      color: var(--gold); background: rgba(212,168,67,.15);
+      border: 1px solid rgba(212,168,67,.4);
+      padding: .3rem .9rem; border-radius: 100px; margin-bottom: 1.75rem;
+    }
+    .hero-logo { margin-bottom: 1.5rem; }
+    .hero-logo .logo-j {
+      font-size: clamp(4rem, 12vw, 9rem); letter-spacing: .12em; line-height: .95;
+      text-shadow: 0 4px 40px rgba(0,0,0,.35);
+    }
+    .hero-logo .logo-c {
+      font-size: clamp(2.5rem, 8vw, 6.5rem); letter-spacing: .06em; line-height: 1;
+      color: var(--gold-2); text-shadow: 0 3px 30px rgba(0,0,0,.35);
+    }
+    .hero-line { width: 48px; height: 2px; background: var(--gold); margin: 1.5rem auto; }
+    .hero-p {
+      font-size: clamp(.9rem, 2vw, 1.05rem); font-weight: 300; line-height: 1.8;
+      color: rgba(255,255,255,.8); margin-bottom: 2.5rem;
+      max-width: 540px; margin-left: auto; margin-right: auto;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-main {
+      font-size: .8rem; font-weight: 600;
+      color: var(--brown); background: var(--gold);
+      padding: .9rem 1.9rem; border: none; border-radius: 6px;
+      cursor: pointer; text-decoration: none; display: inline-block;
+      transition: background .25s, transform .2s, box-shadow .25s;
+    }
+    .btn-main:hover {
+      background: var(--gold-2); transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212,168,67,.35);
+    }
+    .btn-ghost {
+      font-size: .8rem; font-weight: 600;
+      color: var(--white); background: rgba(255,255,255,.1);
+      padding: .9rem 1.9rem; border: 1.5px solid rgba(255,255,255,.4); border-radius: 6px;
+      cursor: pointer; text-decoration: none; display: inline-block;
+      backdrop-filter: blur(4px);
+      transition: background .25s, border-color .25s, transform .2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.7); transform: translateY(-2px); }
+
+    .scroll-dot {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem; z-index: 1;
+    }
+    .scroll-dot span { font-size: .6rem; color: rgba(255,255,255,.4); }
+    .dot-wrap {
+      width: 24px; height: 36px; border: 1.5px solid rgba(255,255,255,.3); border-radius: 12px;
+      display: flex; align-items: flex-start; justify-content: center; padding-top: 5px;
+    }
+    .dot {
+      width: 4px; height: 4px; border-radius: 50%; background: var(--gold);
+      animation: dotScroll 2s ease-in-out infinite;
+    }
+    @keyframes dotScroll {
+      0%   { transform: translateY(0); opacity: 1; }
+      80%  { transform: translateY(14px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 0; }
+    }
+
+    /* ── STATS ── */
+    .stats { background: var(--cream-2); padding: 0; border-top: 1px solid rgba(92,67,61,.1); border-bottom: 1px solid rgba(92,67,61,.1); }
+    .stats-in {
+      display: grid; grid-template-columns: repeat(3,1fr);
+    }
+    .stat {
+      padding: 3rem 2rem; text-align: center;
+      border-right: 1px solid rgba(92,67,61,.1);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-n {
+      font-family: 'Playfair Display', serif; font-weight: 900;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      color: var(--text); line-height: 1; display: block; margin-bottom: .4rem;
+    }
+    .stat-l { font-size: .78rem; font-weight: 500; color: var(--text-3); }
+
+    /* ── HISTOIRE ── */
+    .histoire { padding: 8rem 0; background: var(--white); }
+    .histoire-in {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .chip {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: var(--cream-2); border-radius: 100px;
+      padding: .3rem .85rem; margin-bottom: 1.5rem;
+    }
+    .chip-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .chip span { font-size: .7rem; font-weight: 600; color: var(--brown); }
+    .sec-label {
+      font-size: .72rem; font-weight: 700;
+      color: var(--gold); display: block; margin-bottom: .6rem;
+    }
+    .sec-h {
+      font-family: 'Playfair Display', serif; font-weight: 800;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.2;
+      color: var(--text); margin-bottom: 1.5rem;
+    }
+    .histoire-p {
+      font-size: .93rem; line-height: 1.9; color: var(--text-2); margin-bottom: 1.1rem;
+    }
+    .pullquote {
+      background: var(--cream); border-left: 3px solid var(--gold);
+      padding: 1.1rem 1.5rem; margin: 2rem 0; border-radius: 0 6px 6px 0;
+    }
+    .pullquote p {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 1.05rem; line-height: 1.65; color: var(--brown);
+    }
+    .histoire-img { position: relative; }
+    .histoire-img img {
+      width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 12px;
+    }
+
+    /* ── ENGAGEMENTS ── */
+    .eng-sec { padding: 8rem 0; background: var(--cream); }
+    .sec-head { text-align: center; margin-bottom: 3.5rem; }
+    .eng-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .eng-card {
+      background: var(--white); border-radius: 12px; padding: 2.5rem 2rem;
+      border: 1px solid rgba(92,67,61,.08);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .eng-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(30,15,10,.1); }
+    .eng-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: rgba(212,168,67,.12); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.4rem;
+    }
+    .eng-icon svg {
+      width: 24px; height: 24px; stroke: var(--gold); fill: none;
+      stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .eng-h {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 1.1rem; color: var(--text); margin-bottom: .65rem;
+    }
+    .eng-p { font-size: .86rem; line-height: 1.8; color: var(--text-3); }
+
+    /* ── CLIENTS ── */
+    .clients { padding: 8rem 0; background: var(--brown-dark); }
+    .clients .sec-label { color: rgba(212,168,67,.7); }
+    .clients .sec-h { color: var(--white); }
+    .cl-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+    .cl-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px; padding: 2.5rem 2rem;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: background .3s, transform .3s, border-color .3s;
+    }
+    .cl-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--gold); transform: scaleX(0); transform-origin: left;
+      transition: transform .35s var(--ease);
+    }
+    .cl-card:hover { background: rgba(255,255,255,.12); transform: translateY(-4px); border-color: rgba(212,168,67,.25); }
+    .cl-card:hover::after { transform: scaleX(1); }
+    .cl-tag {
+      display: inline-block; font-size: .65rem; font-weight: 700;
+      color: var(--gold); border: 1px solid rgba(212,168,67,.3);
+      padding: .2rem .7rem; border-radius: 100px; margin-bottom: 1.25rem;
+    }
+    .cl-h {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 1.25rem; color: var(--white); margin-bottom: .8rem; line-height: 1.25;
+    }
+    .cl-p { font-size: .84rem; line-height: 1.8; color: rgba(255,255,255,.58); margin-bottom: 2rem; }
+    .cl-btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .76rem; font-weight: 600; color: var(--gold);
+      background: none; border: none; cursor: pointer; padding: 0;
+      font-family: 'Montserrat', sans-serif; transition: gap .25s;
+    }
+    .cl-btn:hover { gap: .65rem; }
+    .cl-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* ── FROMAGES ── */
+    .fromages { padding: 8rem 0; background: var(--white); }
+    .fromages .sec-head p {
+      font-size: .9rem; line-height: 1.8; color: var(--text-3);
+      max-width: 500px; margin: 0 auto;
+    }
+    .fr-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; margin-top: 3.5rem; }
+    .fr-card {
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid rgba(92,67,61,.1);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .fr-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(30,15,10,.1); }
+    .fr-vis {
+      background: var(--cream); aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
+      border-bottom: 1px solid rgba(92,67,61,.07);
+      position: relative; overflow: hidden;
+    }
+    .fr-vis-name {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 1.1rem; color: var(--text-3); text-align: center; line-height: 1.3;
+    }
+    .fr-info { padding: 1.2rem 1.4rem; background: var(--white); }
+    .fr-name {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: .95rem; color: var(--text); margin-bottom: .3rem;
+    }
+    .fr-detail { font-size: .76rem; color: var(--text-3); margin-bottom: .5rem; }
+    .fr-badge {
+      font-size: .62rem; font-weight: 700; color: var(--gold);
+      background: rgba(212,168,67,.1); padding: .18rem .55rem; border-radius: 3px;
+    }
+
+    /* ── FILIATION ── */
+    .filiation { padding: 5rem 0; background: var(--cream-2); text-align: center; }
+    .fil-in { max-width: 560px; margin: 0 auto; }
+    .fil-name {
+      font-family: 'Playfair Display', serif; font-weight: 700;
+      font-size: 1.2rem; color: var(--brown); margin-bottom: 1rem;
+    }
+    .fil-p { font-size: .9rem; line-height: 1.85; color: var(--text-3); margin-bottom: 1.5rem; }
+    .fil-a {
+      font-size: .8rem; font-weight: 600; color: var(--brown); text-decoration: none;
+      border-bottom: 1.5px solid var(--gold); padding-bottom: 1px; transition: color .2s;
+    }
+    .fil-a:hover { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--brown-dark); padding: 4rem 0 2.5rem; }
+    .foot-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+      padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,.06); margin-bottom: 2rem;
+    }
+    .foot-logo .logo-j { color: var(--white); }
+    .foot-logo .logo-c { color: var(--gold); margin-bottom: .85rem; }
+    .foot-tag { font-size: .8rem; line-height: 1.7; color: rgba(255,255,255,.32); max-width: 220px; }
+    .foot-col h4 {
+      font-size: .7rem; font-weight: 700; color: var(--gold); margin-bottom: 1.2rem;
+    }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+    .foot-col a, .foot-col button {
+      font-size: .82rem; font-family: 'Montserrat', sans-serif;
+      color: rgba(255,255,255,.45); text-decoration: none;
+      background: none; border: none; padding: 0; cursor: pointer; text-align: left;
+      transition: color .25s;
+    }
+    .foot-col a:hover, .foot-col button:hover { color: var(--gold-2); }
+    .foot-bottom {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .foot-copy, .foot-sub { font-size: .75rem; color: rgba(255,255,255,.24); }
+
+    /* ── OVERLAYS ── */
+    .ov {
+      position: fixed; inset: 0; z-index: 500;
+      display: none; justify-content: flex-end;
+    }
+    .ov.on { display: flex; }
+    .ov-bg {
+      position: absolute; inset: 0;
+      background: rgba(18,8,4,.65); backdrop-filter: blur(6px);
+    }
+    .panel {
+      position: relative; z-index: 1; background: var(--white);
+      width: 100%; max-width: 500px; height: 100vh; overflow-y: auto;
+      padding: 2.5rem 2.5rem 3rem;
+      animation: panelIn .3s var(--ease);
+    }
+    @keyframes panelIn {
+      from { transform: translateX(100%); }
+      to   { transform: translateX(0); }
+    }
+    .pan-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+    .pan-title {
+      font-family: 'Playfair Display', serif; font-weight: 800;
+      font-size: 1.5rem; color: var(--text); line-height: 1.2;
+    }
+    .pan-sub { font-size: .82rem; color: var(--text-3); margin-top: .3rem; }
+    .pan-x {
+      background: none; border: 1.5px solid var(--cream-2);
+      width: 38px; height: 38px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-3); font-size: 1rem; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .pan-x:hover { background: var(--cream); }
+    .fg { margin-bottom: 1.1rem; }
+    .fg label {
+      display: block; font-size: .72rem; font-weight: 700;
+      color: var(--brown); margin-bottom: .35rem;
+    }
+    .fg input, .fg select, .fg textarea {
+      width: 100%; padding: .7rem .95rem;
+      border: 1.5px solid var(--cream-2); border-radius: 6px;
+      font-family: 'Montserrat', sans-serif; font-size: .88rem;
+      color: var(--text-2); background: var(--white); outline: none;
+      transition: border-color .2s;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--gold); }
+    .fg textarea { min-height: 90px; resize: vertical; }
+    .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fg-submit {
+      width: 100%; padding: .95rem; margin-top: 1rem;
+      background: var(--brown); color: var(--white);
+      font-family: 'Montserrat', sans-serif; font-size: .8rem; font-weight: 700;
+      border: none; border-radius: 6px; cursor: pointer;
+      transition: background .25s, transform .2s;
+    }
+    .fg-submit:hover { background: var(--gold); color: var(--brown); transform: translateY(-1px); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-ul {
+        display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
+        background: rgba(18,8,4,.97); flex-direction: column; padding: 1.5rem 2rem; gap: 1rem;
+      }
+      .nav-ul.on { display: flex; }
+      .ham { display: flex; }
+      .foot-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .histoire-in { grid-template-columns: 1fr; gap: 3rem; }
+      .histoire-img { order: -1; }
+      .eng-grid { grid-template-columns: 1fr; }
+      .cl-grid { grid-template-columns: 1fr; }
+      .fr-grid { grid-template-columns: repeat(2,1fr); }
+      .stats-in { grid-template-columns: 1fr; }
+      .stat { border-right: none; border-bottom: 1px solid rgba(92,67,61,.1); }
+      .stat:last-child { border-bottom: none; }
+      .foot-grid { grid-template-columns: 1fr; }
+      .panel { max-width: 100%; }
+      .fg-row { grid-template-columns: 1fr; }
+      .foot-bottom { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .fr-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#" class="logo">
+      <span class="logo-j">JURA</span>
+      <span class="logo-c">Comté</span>
+    </a>
+    <button class="ham" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-ul" id="nav-ul">
+      <li><a href="#histoire" class="nav-a">Notre histoire</a></li>
+      <li><a href="#fromages" class="nav-a">Nos fromages</a></li>
+      <li><a href="#clients" class="nav-a">Qui sommes-nous</a></li>
+      <li><a href="#" class="btn-cta" onclick="open_('ce');return false;">Nous contacter</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <div class="hero-bg" id="hbg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-body">
+    <span class="hero-tag">Fromages AOP du Jura · Depuis 1997</span>
+    <div class="hero-logo">
+      <span class="logo-j">JURA</span>
+      <span class="logo-c">Comté</span>
+    </div>
+    <div class="hero-line"></div>
+    <p class="hero-p">
+      Fromages d'exception directement livrés à vos équipes.<br>
+      La qualité maison au service des professionnels depuis 1997.
+    </p>
+    <div class="hero-btns">
+      <a href="#" class="btn-main" onclick="open_('ce');return false;">Demander un devis</a>
+      <a href="#clients" class="btn-ghost">Découvrir nos offres</a>
+    </div>
+  </div>
+  <div class="scroll-dot">
+    <span>Défiler</span>
+    <div class="dot-wrap"><div class="dot"></div></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="container">
+    <div class="stats-in">
+      <div class="stat">
+        <span class="stat-n">1997</span>
+        <span class="stat-l">Fondation</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">+25</span>
+        <span class="stat-l">Fromages sélectionnés</span>
+      </div>
+      <div class="stat">
+        <span class="stat-n">AOP</span>
+        <span class="stat-l">Certifications garanties</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTOIRE -->
+<section class="histoire" id="histoire">
+  <div class="container">
+    <div class="histoire-in">
+      <div>
+        <div class="chip"><div class="chip-dot"></div><span>Maison fondée en 1997</span></div>
+        <span class="sec-label">Notre histoire</span>
+        <h2 class="sec-h">Un ancrage jurassien,<br>une exigence constante</h2>
+        <p class="histoire-p">
+          Née du savoir-faire de la Fromagerie Benoit, Jura Comté s'est construite autour d'une conviction simple : les meilleurs fromages du Jura méritent d'être partagés directement chez ceux qui les valorisent le mieux.
+        </p>
+        <p class="histoire-p">
+          Depuis 1997, nous sélectionnons chaque meule avec la même rigueur : origine tracée, affinage respecté, qualité AOP garantie. Comités d'entreprise, restaurateurs, traiteurs : un accès direct à nos producteurs jurassiens, sans intermédiaire.
+        </p>
+        <div class="pullquote">
+          <p>« Le Comté ne se fabrique pas, il se révèle. Notre rôle est de choisir ceux qui méritent de porter ce nom. »</p>
+        </div>
+      </div>
+      <div class="histoire-img">
+        <img src="photo-jura.webp" alt="Paysage du Jura" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENGAGEMENTS -->
+<section class="eng-sec" id="engagements">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">Ce qui nous distingue</span>
+      <h2 class="sec-h">Nos engagements</h2>
+    </div>
+    <div class="eng-grid">
+      <div class="eng-card">
+        <div class="eng-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M9 14.5 7.5 22l4.5-2.5 4.5 2.5L15 14.5"/>
+          </svg>
+        </div>
+        <h3 class="eng-h">Qualité AOP</h3>
+        <p class="eng-p">Comté, Morbier, Mont d'Or, Bleu de Gex : chaque fromage est certifié AOP, produit dans son aire d'origine, selon un cahier des charges strict.</p>
+      </div>
+      <div class="eng-card">
+        <div class="eng-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3 class="eng-h">Relation directe</h3>
+        <p class="eng-p">Un interlocuteur dédié, des tarifs négociés, une livraison adaptée à votre structure. Pas de centrale d'achats, juste le producteur et vous.</p>
+      </div>
+      <div class="eng-card">
+        <div class="eng-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <h3 class="eng-h">Ancrage local</h3>
+        <p class="eng-p">Implantés dans le Jura depuis 1997, nos producteurs partenaires perpétuent des traditions fromagères transmises de génération en génération.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOS CLIENTS -->
+<section class="clients" id="clients">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">Nos publics</span>
+      <h2 class="sec-h">À qui nous nous adressons</h2>
+    </div>
+    <div class="cl-grid">
+
+      <div class="cl-card" onclick="open_('ce')">
+        <span class="cl-tag">Comités d'Entreprise</span>
+        <h3 class="cl-h">Tarifs préférentiels &amp; livraison dans vos locaux</h3>
+        <p class="cl-p">Tarifs préférentiels pour vos employés, ventes régulières et livraison directement dans vos locaux. Paniers cadeaux, animations dégustation, événements d'équipe : une offre clé en main.</p>
+        <button class="cl-btn">
+          Nous contacter
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="cl-card" onclick="open_('pro')">
+        <span class="cl-tag">Professionnels</span>
+        <h3 class="cl-h">Restaurateurs, traiteurs &amp; épiceries fines</h3>
+        <p class="cl-p">Catalogue professionnel, tarifs négociés, livraison régulière et conseils d'affinage. Nos fromages s'intègrent dans vos créations avec exigence.</p>
+        <button class="cl-btn">
+          Voir le catalogue pro
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="cl-card" onclick="open_('ape')">
+        <span class="cl-tag">APE</span>
+        <h3 class="cl-h">Ventes organisées pour les associations de parents</h3>
+        <p class="cl-p">Commandes groupées, livraison unique, communication prête à l'emploi. Un système clé en main pour financer vos projets scolaires.</p>
+        <button class="cl-btn">
+          Organiser une vente
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FROMAGES -->
+<section class="fromages" id="fromages">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-label">Notre sélection</span>
+      <h2 class="sec-h">Nos fromages</h2>
+      <p>Quelques exemples des fromages de notre catalogue. Chaque pièce porte l'histoire d'un terroir, d'un producteur, d'un affinage singulier.</p>
+    </div>
+    <div class="fr-grid">
+      <div class="fr-card">
+        <div class="fr-vis"><img src="comte-aop-24-mois.webp" alt="Comté Extra 24 mois" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></div>
+        <div class="fr-info">
+          <div class="fr-name">Comté Extra 24 mois</div>
+          <div class="fr-detail">Affiné minimum 24 mois</div>
+          <span class="fr-badge">AOP</span>
+        </div>
+      </div>
+      <div class="fr-card">
+        <div class="fr-vis"><img src="morbier-aop-fruite-jura-comte.webp" alt="Morbier" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></div>
+        <div class="fr-info">
+          <div class="fr-name">Morbier</div>
+          <div class="fr-detail">Pâte pressée, ligne cendrée</div>
+          <span class="fr-badge">AOP</span>
+        </div>
+      </div>
+      <div class="fr-card">
+        <div class="fr-vis"><img src="mont-dor-jura-comte-fromag.webp" alt="Mont d'Or" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></div>
+        <div class="fr-info">
+          <div class="fr-name">Mont d'Or</div>
+          <div class="fr-detail">Disponible d'octobre à mars</div>
+          <span class="fr-badge">AOP · Saisonnier</span>
+        </div>
+      </div>
+      <div class="fr-card">
+        <div class="fr-vis"><img src="moelleux-arinthod-jura-comte-fromage.webp" alt="Moelleux d'Arinthod" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></div>
+        <div class="fr-info">
+          <div class="fr-name">Moelleux d'Arinthod</div>
+          <div class="fr-detail">Pâte molle, croûte lavée</div>
+          <span class="fr-badge">Jura</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILIATION -->
+<section class="filiation">
+  <div class="container">
+    <div class="fil-in">
+      <div class="fil-name">Fromagerie Benoit</div>
+      <p class="fil-p">
+        Jura Comté est la filiale professionnelle de la <strong>Fromagerie Benoit</strong>, maison fondée en 1997 dans le Jura. Derrière chaque commande, des hommes et des femmes qui sélectionnent et affinent les meilleurs fromages de la région depuis plus de vingt-cinq ans.
+      </p>
+      <a href="https://fromagerie-benoit.com" class="fil-a" target="_blank" rel="noopener noreferrer">
+        Découvrir la Fromagerie Benoit →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-logo">
+        <a href="#" class="logo">
+          <span class="logo-j">JURA</span>
+          <span class="logo-c">Comté</span>
+        </a>
+        <p class="foot-tag">Fromages AOP du Jura, directement livrés depuis 1997.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#histoire">Notre histoire</a></li>
+          <li><a href="#fromages">Nos fromages</a></li>
+          <li><a href="#clients">Nos clients</a></li>
+          <li><a href="#engagements">Engagements</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Nous contacter</h4>
+        <ul>
+          <li><button onclick="open_('ce')">Comités d'Entreprise</button></li>
+          <li><button onclick="open_('pro')">Professionnels</button></li>
+          <li><button onclick="open_('ape')">APE</button></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Maison mère</h4>
+        <ul>
+          <li><a href="https://fromagerie-benoit.com" target="_blank" rel="noopener">Fromagerie Benoit</a></li>
+          <li><a href="mailto:contact@jura-comte.com">contact@jura-comte.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="foot-copy">© 2026 Jura Comté · Filiale de la Fromagerie Benoit</span>
+      <span class="foot-sub">Tous droits réservés</span>
+    </div>
+  </div>
+</footer>
+
+<!-- PANELS -->
+
+<div class="ov" id="ov-ce">
+  <div class="ov-bg" onclick="close_('ce')"></div>
+  <div class="panel">
+    <div class="pan-head">
+      <div>
+        <div class="pan-title">Comités d'Entreprise</div>
+        <div class="pan-sub">Tarifs employés, ventes régulières, livraison sur site</div>
+      </div>
+      <button class="pan-x" onclick="close_('ce')" aria-label="Fermer">✕</button>
+    </div>
+    <form action="mailto:contact@jura-comte.com" method="post" enctype="text/plain">
+      <div class="fg-row">
+        <div class="fg"><label>Prénom</label><input type="text" name="prenom" placeholder="Votre prénom" required></div>
+        <div class="fg"><label>Nom</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+      </div>
+      <div class="fg"><label>Entreprise / CE</label><input type="text" name="entreprise" placeholder="Nom de l'entreprise ou du CE" required></div>
+      <div class="fg-row">
+        <div class="fg"><label>Email</label><input type="email" name="email" placeholder="vous@entreprise.fr" required></div>
+        <div class="fg"><label>Téléphone</label><input type="tel" name="telephone" placeholder="06 XX XX XX XX"></div>
+      </div>
+      <div class="fg"><label>Message</label><textarea name="message" placeholder="Type de commande, quantité, échéance…" required></textarea></div>
+      <button type="submit" class="fg-submit">Envoyer la demande</button>
+    </form>
+  </div>
+</div>
+
+<div class="ov" id="ov-pro">
+  <div class="ov-bg" onclick="close_('pro')"></div>
+  <div class="panel">
+    <div class="pan-head">
+      <div>
+        <div class="pan-title">Professionnels</div>
+        <div class="pan-sub">Restaurateurs, traiteurs, épiceries fines</div>
+      </div>
+      <button class="pan-x" onclick="close_('pro')" aria-label="Fermer">✕</button>
+    </div>
+    <form action="mailto:contact@jura-comte.com" method="post" enctype="text/plain">
+      <div class="fg-row">
+        <div class="fg"><label>Prénom</label><input type="text" name="prenom" placeholder="Votre prénom" required></div>
+        <div class="fg"><label>Nom</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+      </div>
+      <div class="fg"><label>Raison sociale</label><input type="text" name="raison_sociale" placeholder="Nom de l'établissement" required></div>
+      <div class="fg">
+        <label>Type d'activité</label>
+        <select name="activite">
+          <option value="">Sélectionner…</option>
+          <option>Restaurateur</option>
+          <option>Traiteur</option>
+          <option>Épicerie fine</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Email</label><input type="email" name="email" placeholder="contact@etablissement.fr" required></div>
+        <div class="fg"><label>Téléphone</label><input type="tel" name="telephone" placeholder="06 XX XX XX XX"></div>
+      </div>
+      <div class="fg"><label>Message</label><textarea name="message" placeholder="Besoin, fréquence de commande, volumes…"></textarea></div>
+      <button type="submit" class="fg-submit">Demander le catalogue pro</button>
+    </form>
+  </div>
+</div>
+
+<div class="ov" id="ov-ape">
+  <div class="ov-bg" onclick="close_('ape')"></div>
+  <div class="panel">
+    <div class="pan-head">
+      <div>
+        <div class="pan-title">Associations de Parents</div>
+        <div class="pan-sub">Ventes organisées clé en main</div>
+      </div>
+      <button class="pan-x" onclick="close_('ape')" aria-label="Fermer">✕</button>
+    </div>
+    <form action="mailto:contact@jura-comte.com" method="post" enctype="text/plain">
+      <div class="fg-row">
+        <div class="fg"><label>Prénom</label><input type="text" name="prenom" placeholder="Votre prénom" required></div>
+        <div class="fg"><label>Nom</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+      </div>
+      <div class="fg"><label>École / Association</label><input type="text" name="ecole" placeholder="Nom de l'école ou de l'association" required></div>
+      <div class="fg"><label>Email</label><input type="email" name="email" placeholder="contact@association.fr" required></div>
+      <div class="fg"><label>Date envisagée</label><input type="date" name="date"></div>
+      <div class="fg"><label>Message</label><textarea name="message" placeholder="Événement, nombre de familles, période souhaitée…"></textarea></div>
+      <button type="submit" class="fg-submit">Organiser ma vente</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Nav scroll → cream
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('up', scrollY > 60), { passive: true });
+
+  // Hamburger
+  document.getElementById('ham').addEventListener('click', () => {
+    document.getElementById('nav-ul').classList.toggle('on');
+  });
+  document.getElementById('nav-ul').querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('nav-ul').classList.remove('on'));
+  });
+
+  // Hero Ken Burns
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.getElementById('hbg').classList.add('go');
+  }));
+
+  // Panels
+  function open_(id) {
+    document.querySelectorAll('.ov.on').forEach(o => o.classList.remove('on'));
+    const el = document.getElementById('ov-' + id);
+    if (el) { el.classList.add('on'); document.body.style.overflow = 'hidden'; }
+  }
+  function close_(id) {
+    const el = document.getElementById('ov-' + id);
+    if (el) { el.classList.remove('on'); document.body.style.overflow = ''; }
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.ov.on').forEach(o => o.classList.remove('on'));
+    document.body.style.overflow = '';
+  });
+</script>
+</body>
+</html>
