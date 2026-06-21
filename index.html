@@ -3,106 +3,878 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Site en construction</title>
+  <title>Jura Comté · Fromages d'exception du Jura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tinos:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      min-height: 100vh;
-      font-family: 'Georgia', serif;
-      background-color: #1a1a1a;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--blanc);
+      color: var(--texte-2);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+
+    :root {
+      --vert:       #152115;
+      --vert-2:     #1C2E1C;
+      --vert-3:     #2A4230;
+      --or:         #B8832C;
+      --or-clair:   #E2B24E;
+      --or-doux:    #F0D08C;
+      --ivoire:     #F5EEE0;
+      --creme:      #EDE4CF;
+      --blanc:      #FDFAF4;
+      --texte:      #111A10;
+      --texte-2:    #344838;
+      --texte-3:    #7A9270;
+      --nav-h:      72px;
+      --ease:       cubic-bezier(.22, 1, .36, 1);
     }
 
+    /* grain texture */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; pointer-events: none; z-index: 9990;
+      opacity: .03;
+      background-image: radial-gradient(rgba(0,0,0,.6) 1px, transparent 1px);
+      background-size: 3px 3px;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; }
+
+    /* scroll reveal */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .75s var(--ease), transform .75s var(--ease);
+    }
+    .reveal.d1 { transition-delay: .1s; }
+    .reveal.d2 { transition-delay: .2s; }
+    .reveal.d3 { transition-delay: .32s; }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 400;
+      height: var(--nav-h);
+      transition: background .45s var(--ease), box-shadow .45s;
+    }
+    nav.scrolled {
+      background: rgba(17,26,16,.95);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.07);
+    }
+    .nav-inner {
+      height: 100%; max-width: 1200px; margin: 0 auto; padding: 0 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { text-decoration: none; line-height: 1; }
+    .logo-j {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.45rem; letter-spacing: .14em; text-transform: uppercase;
+      color: #fff; display: block; line-height: 1; transition: color .3s;
+    }
+    .logo-c {
+      font-family: 'Tinos', serif; font-weight: 700; text-transform: uppercase;
+      font-size: 1.05rem; letter-spacing: .05em;
+      color: var(--or-clair); display: block; line-height: 1.1; transition: color .3s;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.75rem; list-style: none; }
+    .nav-a {
+      font-size: .74rem; font-weight: 400; letter-spacing: .1em; text-transform: uppercase;
+      color: rgba(255,255,255,.65); text-decoration: none; transition: color .25s;
+    }
+    .nav-a:hover { color: #fff; }
+    .nav-cta {
+      font-size: .7rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--vert); background: var(--or-clair);
+      padding: .58rem 1.5rem; text-decoration: none; border-radius: 2px;
+      transition: background .25s, transform .2s, box-shadow .25s;
+    }
+    .nav-cta:hover {
+      background: var(--or-doux); transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(226,178,78,.3);
+    }
+    .ham {
+      display: none; background: none; border: none; cursor: pointer; padding: 4px;
+      flex-direction: column; gap: 5px;
+    }
+    .ham span { display: block; width: 22px; height: 1.5px; background: #fff; }
+
+    /* ── HERO ── */
     .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; align-items: flex-end;
       overflow: hidden;
     }
-
-    .bg {
-      position: absolute;
-      inset: 0;
-      background-image: url('photo-jura.webp');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('photo-jura.webp') center 30% / cover no-repeat;
+      transform: scale(1.08);
+      transition: transform 12s ease-out;
+    }
+    .hero-bg.go { transform: scale(1); }
+    .hero-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(165deg, rgba(10,18,8,.2) 0%, rgba(10,18,8,.45) 45%, rgba(10,18,8,.8) 100%);
+    }
+    .hero-deco {
+      position: absolute; top: 50%; left: -1%;
+      transform: translateY(-58%);
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: clamp(9rem, 25vw, 22rem); letter-spacing: .08em;
+      text-transform: uppercase; color: rgba(255,255,255,.045);
+      line-height: 1; pointer-events: none; user-select: none; white-space: nowrap;
+    }
+    .hero-body {
+      position: relative; z-index: 2;
+      padding: 0 2.5rem 5rem;
+      max-width: 1200px; margin: 0 auto; width: 100%;
+    }
+    .hero-label {
+      display: inline-block; margin-bottom: 1.5rem;
+      font-size: .67rem; font-weight: 500; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--or-clair);
+    }
+    .hero-title {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: clamp(4rem, 11vw, 9.5rem);
+      letter-spacing: .08em; text-transform: uppercase;
+      color: #fff; line-height: .9; display: block;
+      text-shadow: 0 4px 50px rgba(0,0,0,.2);
+    }
+    .hero-subtitle {
+      font-family: 'Tinos', serif; font-weight: 700; text-transform: uppercase;
+      font-size: clamp(2.5rem, 7vw, 6.5rem);
+      letter-spacing: .04em; color: var(--or-clair); display: block; line-height: 1;
+      text-shadow: 0 3px 30px rgba(0,0,0,.2);
+    }
+    .hero-rule { width: 50px; height: 1.5px; background: var(--or); margin: 2rem 0; }
+    .hero-p {
+      font-size: clamp(.85rem, 1.6vw, 1rem); font-weight: 300; line-height: 1.9;
+      color: rgba(255,255,255,.78); max-width: 420px; margin-bottom: 2.25rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-or {
+      font-size: .72rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--vert); background: var(--or-clair);
+      padding: .9rem 2rem; text-decoration: none; border-radius: 2px;
+      display: inline-block; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background .25s, transform .2s, box-shadow .25s;
+    }
+    .btn-or:hover { background: var(--or-doux); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(178,131,44,.4); }
+    .btn-contour {
+      font-size: .72rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      color: #fff; background: transparent;
+      padding: .9rem 2rem; text-decoration: none; border-radius: 2px;
+      display: inline-block; border: 1.5px solid rgba(255,255,255,.38);
+      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      transition: background .25s, border-color .25s, transform .2s;
+    }
+    .btn-contour:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.7); transform: translateY(-2px); }
+    .scroll-ind {
+      position: absolute; bottom: 2rem; right: 2.5rem; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      color: rgba(255,255,255,.35);
+    }
+    .scroll-ind span { font-size: .58rem; letter-spacing: .15em; text-transform: uppercase; }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.35), transparent);
+      animation: lineDown 2s ease-in-out infinite;
+    }
+    @keyframes lineDown {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
     }
 
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(10, 8, 5, 0.35) 0%,
-        rgba(10, 8, 5, 0.55) 100%
-      );
+    /* ── STATS ── */
+    .stats { background: var(--vert-2); border-top: 1px solid rgba(255,255,255,.06); }
+    .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+    .stat {
+      padding: 3.5rem 2.5rem; text-align: center;
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-n {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: clamp(2.8rem, 6vw, 4.8rem);
+      color: var(--or-clair); line-height: 1; display: block; margin-bottom: .4rem;
+    }
+    .stat-l { font-size: .7rem; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.32); }
+
+    /* ── HISTOIRE ── */
+    .histoire { padding: 9rem 0; background: var(--blanc); }
+    .histoire-in { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: center; }
+    .sec-badge { display: inline-flex; align-items: center; gap: .5rem; margin-bottom: 2rem; }
+    .sec-badge-line { width: 28px; height: 1.5px; background: var(--or); flex-shrink: 0; }
+    .sec-badge-text { font-size: .67rem; letter-spacing: .16em; text-transform: uppercase; color: var(--or); font-weight: 500; }
+    .sec-h {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: clamp(2rem, 3.5vw, 3rem); color: var(--texte); line-height: 1.15;
+      margin-bottom: 2rem;
+    }
+    .sec-h em { font-style: normal; font-weight: 400; color: var(--vert-3); }
+    .hist-p {
+      font-size: .9rem; line-height: 1.95; color: var(--texte-2);
+      margin-bottom: 1.1rem; font-weight: 300;
+    }
+    .pullquote {
+      margin: 2.5rem 0; padding: 1.5rem 1.75rem;
+      border-left: 2.5px solid var(--or); background: var(--ivoire);
+    }
+    .pullquote p {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.2rem; line-height: 1.7; color: var(--vert-3);
+    }
+    .histoire-img { position: relative; }
+    .histoire-img::before {
+      content: '';
+      position: absolute; top: -20px; left: -20px; right: 20px; bottom: 20px;
+      border: 1.5px solid rgba(184,131,44,.45); border-radius: 4px;
+      pointer-events: none; z-index: 0;
+    }
+    .histoire-img img {
+      position: relative; z-index: 1;
+      width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 4px;
+    }
+    .hist-badge {
+      position: absolute; z-index: 2; bottom: -16px; right: -16px;
+      background: var(--vert-2); color: var(--or-clair);
+      padding: 1rem 1.5rem; border-radius: 4px;
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1rem; line-height: 1.3;
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
     }
 
-    .content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 2rem;
-      color: #fff;
+    /* ── ENGAGEMENTS ── */
+    .eng { padding: 9rem 0; background: var(--ivoire); }
+    .eng-head { margin-bottom: 5rem; }
+    .eng-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+    .eng-card {
+      padding: 2.75rem 2rem; border: 1px solid rgba(21,33,21,.1);
+      background: var(--blanc); border-radius: 4px;
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s;
     }
-
-    .label {
-      display: inline-block;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255, 220, 140, 0.9);
+    .eng-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(21,33,21,.1); border-color: var(--or); }
+    .eng-num {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 4.5rem; line-height: 1; color: rgba(21,33,21,.07);
+      margin-bottom: 1.5rem; display: block;
+    }
+    .eng-icon {
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 1.5px solid rgba(184,131,44,.3);
+      display: flex; align-items: center; justify-content: center;
       margin-bottom: 1.5rem;
     }
+    .eng-icon svg { width: 18px; height: 18px; stroke: var(--or); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .eng-h {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.3rem; color: var(--texte); margin-bottom: .75rem;
+    }
+    .eng-p { font-size: .84rem; line-height: 1.85; color: var(--texte-3); font-weight: 300; }
 
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 5rem);
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      line-height: 1.1;
-      color: #fff;
-      text-shadow: 0 2px 30px rgba(0, 0, 0, 0.4);
-      margin-bottom: 1.5rem;
+    /* ── CLIENTS ── */
+    .clients { padding: 9rem 0; background: var(--vert); }
+    .clients-head { margin-bottom: 4rem; }
+    .clients .sec-badge-line { background: rgba(226,178,78,.45); }
+    .clients .sec-badge-text { color: rgba(226,178,78,.65); }
+    .clients .sec-h { color: #fff; }
+    .cl-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.06); }
+    .cl-card {
+      background: var(--vert); padding: 2.75rem 2rem;
+      cursor: pointer; position: relative; overflow: hidden;
+      transition: background .3s, transform .35s var(--ease);
+    }
+    .cl-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--or-clair); transform: scaleX(0); transform-origin: left;
+      transition: transform .4s var(--ease);
+    }
+    .cl-card:hover { background: var(--vert-3); transform: translateY(-4px); }
+    .cl-card:hover::before { transform: scaleX(1); }
+    .cl-number {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 3.5rem; color: rgba(255,255,255,.06); line-height: 1;
+      display: block; margin-bottom: 1.25rem;
+    }
+    .cl-tag {
+      display: inline-block; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+      font-weight: 500; color: var(--or-clair);
+      border: 1px solid rgba(226,178,78,.22); padding: .22rem .75rem; border-radius: 1px;
+      margin-bottom: 1.25rem;
+    }
+    .cl-h {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.35rem; color: #fff; line-height: 1.3; margin-bottom: 1rem;
+    }
+    .cl-p { font-size: .83rem; line-height: 1.85; color: rgba(255,255,255,.45); font-weight: 300; margin-bottom: 2rem; }
+    .cl-cta {
+      display: inline-flex; align-items: center; gap: .45rem;
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500;
+      color: var(--or-clair); background: none; border: none; cursor: pointer; padding: 0;
+      font-family: 'DM Sans', sans-serif; transition: gap .25s;
+    }
+    .cl-cta:hover { gap: .75rem; }
+    .cl-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ── FROMAGES ── */
+    .fromages { padding: 9rem 0; background: var(--blanc); }
+    .fromages-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem; margin-bottom: 4rem; }
+    .fr-intro { font-size: .88rem; line-height: 1.85; color: var(--texte-3); font-weight: 300; max-width: 380px; }
+    .fr-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.5rem; }
+    .fr-card {
+      border-radius: 4px; overflow: hidden; border: 1px solid rgba(21,33,21,.08);
+      background: var(--blanc);
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+    }
+    .fr-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(21,33,21,.12); }
+    .fr-img { aspect-ratio: 1; overflow: hidden; }
+    .fr-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .6s var(--ease);
+    }
+    .fr-card:hover .fr-img img { transform: scale(1.05); }
+    .fr-info { padding: 1.25rem 1.4rem; }
+    .fr-name {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.1rem; color: var(--texte); margin-bottom: .3rem;
+    }
+    .fr-detail { font-size: .76rem; color: var(--texte-3); font-weight: 300; margin-bottom: .6rem; }
+    .fr-badge {
+      font-size: .58rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--or); background: rgba(184,131,44,.1);
+      padding: .2rem .6rem; border-radius: 1px; border: 1px solid rgba(184,131,44,.2);
     }
 
-    .divider {
-      width: 60px;
-      height: 1px;
-      background: rgba(255, 220, 140, 0.7);
-      margin: 0 auto 1.5rem;
+    /* ── FILIATION ── */
+    .filiation {
+      padding: 6rem 0; background: var(--ivoire); text-align: center;
+      border-top: 1px solid rgba(21,33,21,.08);
     }
+    .fil-in { max-width: 580px; margin: 0 auto; }
+    .fil-name {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.5rem; color: var(--texte); margin-bottom: 1.25rem;
+    }
+    .fil-p { font-size: .88rem; line-height: 1.9; color: var(--texte-3); font-weight: 300; margin-bottom: 1.75rem; }
+    .fil-a {
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500;
+      color: var(--vert-3); text-decoration: none;
+      border-bottom: 1.5px solid var(--or); padding-bottom: 2px; transition: color .2s;
+    }
+    .fil-a:hover { color: var(--or); }
 
-    p {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      font-size: clamp(0.9rem, 2vw, 1.05rem);
-      font-weight: 300;
-      color: rgba(255, 255, 255, 0.8);
-      letter-spacing: 0.04em;
-      line-height: 1.7;
-      max-width: 480px;
-      margin: 0 auto;
+    /* ── FOOTER ── */
+    footer { background: var(--vert); padding: 5rem 0 2.5rem; }
+    .foot-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+      padding-bottom: 4rem; border-bottom: 1px solid rgba(255,255,255,.06); margin-bottom: 2.5rem;
+    }
+    .foot-tagline { font-size: .8rem; line-height: 1.75; color: rgba(255,255,255,.28); margin-top: .85rem; max-width: 200px; }
+    .foot-col h4 { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 500; color: rgba(226,178,78,.5); margin-bottom: 1.4rem; }
+    .foot-col ul { list-style: none; display: flex; flex-direction: column; gap: .7rem; }
+    .foot-col a, .foot-col button {
+      font-size: .8rem; color: rgba(255,255,255,.36); font-family: 'DM Sans', sans-serif;
+      text-decoration: none; background: none; border: none; cursor: pointer;
+      padding: 0; text-align: left; transition: color .25s;
+    }
+    .foot-col a:hover, .foot-col button:hover { color: var(--or-clair); }
+    .foot-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .foot-copy, .foot-sub { font-size: .7rem; color: rgba(255,255,255,.18); }
+
+    /* ── PANELS ── */
+    .ov { position: fixed; inset: 0; z-index: 500; display: none; justify-content: flex-end; }
+    .ov.on { display: flex; }
+    .ov-bg {
+      position: absolute; inset: 0;
+      background: rgba(15,24,14,.72); backdrop-filter: blur(8px);
+      animation: fadeIn .3s ease;
+    }
+    .panel {
+      position: relative; z-index: 1; background: var(--blanc);
+      width: 100%; max-width: 480px; height: 100vh; overflow-y: auto;
+      padding: 2.75rem 2.5rem 3rem;
+      animation: slideIn .35s var(--ease);
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .pan-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; }
+    .pan-title {
+      font-family: 'Tinos', serif; font-weight: 700;
+      font-size: 1.75rem; color: var(--texte); line-height: 1.15;
+    }
+    .pan-sub { font-size: .8rem; color: var(--texte-3); margin-top: .35rem; font-weight: 300; }
+    .pan-x {
+      background: none; border: 1px solid rgba(21,33,21,.15);
+      width: 36px; height: 36px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--texte-3); font-size: .9rem; flex-shrink: 0; transition: background .2s;
+    }
+    .pan-x:hover { background: var(--ivoire); }
+    .fg { margin-bottom: 1.1rem; }
+    .fg label { display: block; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; color: var(--vert-3); margin-bottom: .4rem; }
+    .fg input, .fg select, .fg textarea {
+      width: 100%; padding: .72rem 1rem;
+      border: 1.5px solid rgba(21,33,21,.12); border-radius: 2px;
+      font-family: 'DM Sans', sans-serif; font-size: .88rem;
+      color: var(--texte-2); background: var(--blanc); outline: none;
+      transition: border-color .2s;
+    }
+    .fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--or); }
+    .fg textarea { min-height: 90px; resize: vertical; }
+    .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .fg-submit {
+      width: 100%; padding: 1rem; margin-top: 1.25rem;
+      background: var(--vert-2); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: .7rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      border: none; border-radius: 2px; cursor: pointer;
+      transition: background .25s, transform .2s;
+    }
+    .fg-submit:hover { background: var(--vert-3); transform: translateY(-1px); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) { .fr-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
+        background: rgba(17,26,16,.98); flex-direction: column;
+        padding: 1.5rem 2rem; gap: 1.25rem;
+      }
+      .nav-links.on { display: flex; }
+      .ham { display: flex; }
+      .eng-grid { grid-template-columns: 1fr; }
+      .cl-grid { grid-template-columns: 1fr; background: none; border: none; gap: .75rem; }
+      .foot-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 1.25rem; }
+
+      /* sections */
+      .histoire   { padding: 4.5rem 0; }
+      .eng        { padding: 4.5rem 0; }
+      .clients    { padding: 4.5rem 0; }
+      .fromages   { padding: 4.5rem 0; }
+      .filiation  { padding: 3rem 0; }
+      footer      { padding: 3rem 0 2rem; }
+
+      /* stats */
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat { padding: 1.75rem 1.5rem; border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); }
+      .stat:last-child { border-bottom: none; }
+
+      /* histoire */
+      .histoire-in { grid-template-columns: 1fr; gap: 2.5rem; }
+      .histoire-img { order: -1; }
+      .histoire-img::before { display: none; }
+      .hist-badge { right: 0; bottom: -12px; }
+
+      /* eng */
+      .eng-head { margin-bottom: 2.5rem; }
+      .eng-card { padding: 1.75rem 1.5rem; }
+      .eng-num { font-size: 3rem; margin-bottom: 1rem; }
+
+      /* clients */
+      .clients-head { margin-bottom: 2.5rem; }
+      .cl-card { padding: 1.75rem 1.5rem; }
+      .cl-number { font-size: 2.5rem; margin-bottom: .75rem; }
+
+      /* fromages */
+      .fromages-head { flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+      .fr-intro { max-width: 100%; }
+
+      /* footer */
+      .foot-top { grid-template-columns: 1fr; gap: 2rem; padding-bottom: 2.5rem; margin-bottom: 1.5rem; }
+      .foot-bottom { flex-direction: column; text-align: center; }
+
+      /* panels */
+      .panel { max-width: 100%; padding: 2rem 1.25rem 2.5rem; }
+      .fg-row { grid-template-columns: 1fr; }
+
+      /* hero */
+      .hero-body { padding: 0 1.25rem 3.5rem; }
+      .hero-rule { margin: 1.25rem 0; }
+      .hero-p { margin-bottom: 1.5rem; }
+      .sec-badge { margin-bottom: 1.25rem; }
+      .sec-h { margin-bottom: 1.25rem; }
+      .pullquote { margin: 1.75rem 0; }
+    }
+    @media (max-width: 480px) {
+      .fr-grid { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; }
+      .histoire   { padding: 3.5rem 0; }
+      .eng        { padding: 3.5rem 0; }
+      .clients    { padding: 3.5rem 0; }
+      .fromages   { padding: 3.5rem 0; }
     }
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div class="bg"></div>
-    <div class="overlay"></div>
-    <div class="content">
-      <span class="label">Jura &amp; Comté</span>
-      <h1>Site en construction</h1>
-      <div class="divider"></div>
-      <p>Nous travaillons à vous offrir une belle expérience.<br>Revenez bientôt.</p>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-j">JURA</span>
+      <span class="logo-c">COMTÉ</span>
+    </a>
+    <button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#histoire" class="nav-a">Notre histoire</a></li>
+      <li><a href="#fromages" class="nav-a">Nos fromages</a></li>
+      <li><a href="#clients" class="nav-a">Qui sommes-nous</a></li>
+      <li><a href="#" class="nav-cta" onclick="openPanel('ce');return false;">Nous contacter</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-deco" aria-hidden="true">JURA</div>
+  <div class="hero-body">
+    <span class="hero-label">Fromages AOP du Jura · Depuis 1997</span>
+    <span class="hero-title">JURA</span>
+    <span class="hero-subtitle">COMTÉ</span>
+    <div class="hero-rule"></div>
+    <p class="hero-p">Fromages d'exception du Jura, directement livrés à vos équipes. Depuis 1997, la qualité maison au service des professionnels.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-or" onclick="openPanel('ce');return false;">Demander un devis</a>
+      <a href="#clients" class="btn-contour">Découvrir nos offres</a>
     </div>
-  </section>
+  </div>
+  <div class="scroll-ind" aria-hidden="true">
+    <span>Défiler</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat reveal"><span class="stat-n">1997</span><span class="stat-l">Fondation</span></div>
+    <div class="stat reveal d1"><span class="stat-n">+25</span><span class="stat-l">Fromages sélectionnés</span></div>
+    <div class="stat reveal d2"><span class="stat-n">AOP</span><span class="stat-l">Certifications garanties</span></div>
+  </div>
+</section>
+
+<!-- HISTOIRE -->
+<section class="histoire" id="histoire">
+  <div class="container">
+    <div class="histoire-in">
+      <div>
+        <div class="sec-badge reveal">
+          <div class="sec-badge-line"></div>
+          <span class="sec-badge-text">Maison fondée en 1997</span>
+        </div>
+        <h2 class="sec-h reveal">Un ancrage jurassien,<br><em>une exigence constante</em></h2>
+        <p class="hist-p reveal d1">Née du savoir-faire de la Fromagerie Benoit, Jura Comté s'est construite autour d'une conviction simple : les meilleurs fromages du Jura méritent d'être partagés directement chez ceux qui les valorisent le mieux.</p>
+        <p class="hist-p reveal d1">Depuis 1997, nous sélectionnons chaque meule avec la même rigueur : origine tracée, affinage respecté, qualité AOP garantie. Comités d'entreprise, restaurateurs, traiteurs : un accès direct à nos producteurs jurassiens, sans intermédiaire.</p>
+        <div class="pullquote reveal d2">
+          <p>« Le Comté ne se fabrique pas, il se révèle. Notre rôle est de choisir ceux qui méritent de porter ce nom. »</p>
+        </div>
+      </div>
+      <div class="histoire-img reveal">
+        <img src="photo-jura.webp" alt="Paysage du Jura" loading="lazy">
+        <div class="hist-badge">Maison Benoit<br>depuis 1997</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENGAGEMENTS -->
+<section class="eng" id="engagements">
+  <div class="container">
+    <div class="eng-head">
+      <div class="sec-badge reveal"><div class="sec-badge-line"></div><span class="sec-badge-text">Ce qui nous distingue</span></div>
+      <h2 class="sec-h reveal">Nos engagements</h2>
+    </div>
+    <div class="eng-grid">
+      <div class="eng-card reveal">
+        <span class="eng-num">01</span>
+        <div class="eng-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M9 14.5 7.5 22l4.5-2.5 4.5 2.5L15 14.5"/></svg></div>
+        <h3 class="eng-h">Qualité AOP</h3>
+        <p class="eng-p">Comté, Morbier, Mont d'Or, Bleu de Gex : chaque fromage est certifié AOP, produit dans son aire d'origine, selon un cahier des charges strict.</p>
+      </div>
+      <div class="eng-card reveal d1">
+        <span class="eng-num">02</span>
+        <div class="eng-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h3 class="eng-h">Relation directe</h3>
+        <p class="eng-p">Un interlocuteur dédié, des tarifs négociés, une livraison adaptée à votre structure. Pas de centrale d'achats, juste le producteur et vous.</p>
+      </div>
+      <div class="eng-card reveal d2">
+        <span class="eng-num">03</span>
+        <div class="eng-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <h3 class="eng-h">Ancrage local</h3>
+        <p class="eng-p">Implantés dans le Jura depuis 1997, nos producteurs partenaires perpétuent des traditions fromagères transmises de génération en génération.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients" id="clients">
+  <div class="container">
+    <div class="clients-head">
+      <div class="sec-badge reveal"><div class="sec-badge-line"></div><span class="sec-badge-text">Nos publics</span></div>
+      <h2 class="sec-h reveal">À qui nous nous adressons</h2>
+    </div>
+    <div class="cl-grid">
+      <div class="cl-card reveal" onclick="openPanel('ce')">
+        <span class="cl-number">01</span>
+        <span class="cl-tag">Comités d'Entreprise</span>
+        <h3 class="cl-h">Tarifs préférentiels &amp; livraison dans vos locaux</h3>
+        <p class="cl-p">Tarifs préférentiels pour vos employés, ventes régulières et livraison directement dans vos locaux. Paniers cadeaux, animations dégustation, événements d'équipe : une offre clé en main.</p>
+        <button class="cl-cta">Nous contacter <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="cl-card reveal d1" onclick="openPanel('pro')">
+        <span class="cl-number">02</span>
+        <span class="cl-tag">Professionnels</span>
+        <h3 class="cl-h">Restaurateurs, traiteurs &amp; épiceries fines</h3>
+        <p class="cl-p">Catalogue professionnel, tarifs négociés, livraison régulière et conseils d'affinage. Nos fromages s'intègrent dans vos créations avec exigence.</p>
+        <button class="cl-cta">Voir le catalogue pro <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <div class="cl-card reveal d2" onclick="openPanel('ape')">
+        <span class="cl-number">03</span>
+        <span class="cl-tag">APE</span>
+        <h3 class="cl-h">Ventes organisées pour les associations de parents</h3>
+        <p class="cl-p">Commandes groupées, livraison unique, communication prête à l'emploi. Un système clé en main pour financer vos projets scolaires.</p>
+        <button class="cl-cta">Organiser une vente <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FROMAGES -->
+<section class="fromages" id="fromages">
+  <div class="container">
+    <div class="fromages-head">
+      <div>
+        <div class="sec-badge reveal"><div class="sec-badge-line"></div><span class="sec-badge-text">Notre sélection</span></div>
+        <h2 class="sec-h reveal">Nos fromages</h2>
+      </div>
+      <p class="fr-intro reveal">Quelques pièces de notre catalogue. Chaque fromage porte l'histoire d'un terroir, d'un producteur, d'un affinage singulier.</p>
+    </div>
+    <div class="fr-grid">
+      <div class="fr-card reveal">
+        <div class="fr-img"><img src="comte-aop-24-mois.webp" alt="Comté Extra 24 mois" loading="lazy"></div>
+        <div class="fr-info">
+          <div class="fr-name">Comté Extra 24 mois</div>
+          <div class="fr-detail">Affiné minimum 24 mois</div>
+          <span class="fr-badge">AOP</span>
+        </div>
+      </div>
+      <div class="fr-card reveal d1">
+        <div class="fr-img"><img src="morbier-aop-fruite-jura-comte.webp" alt="Morbier" loading="lazy"></div>
+        <div class="fr-info">
+          <div class="fr-name">Morbier</div>
+          <div class="fr-detail">Pâte pressée, ligne cendrée</div>
+          <span class="fr-badge">AOP</span>
+        </div>
+      </div>
+      <div class="fr-card reveal d2">
+        <div class="fr-img"><img src="mont-dor-jura-comte-fromag.webp" alt="Mont d'Or" loading="lazy"></div>
+        <div class="fr-info">
+          <div class="fr-name">Mont d'Or</div>
+          <div class="fr-detail">Disponible d'octobre à mars</div>
+          <span class="fr-badge">AOP · Saisonnier</span>
+        </div>
+      </div>
+      <div class="fr-card reveal d3">
+        <div class="fr-img"><img src="moelleux-arinthod-jura-comte-fromage.webp" alt="Moelleux d'Arinthod" loading="lazy"></div>
+        <div class="fr-info">
+          <div class="fr-name">Moelleux d'Arinthod</div>
+          <div class="fr-detail">Pâte molle, croûte lavée</div>
+          <span class="fr-badge">Jura</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILIATION -->
+<section class="filiation">
+  <div class="container">
+    <div class="fil-in">
+      <div class="fil-name reveal">Fromagerie Benoit</div>
+      <p class="fil-p reveal d1">Jura Comté est la filiale professionnelle de la <strong>Fromagerie Benoit</strong>, maison fondée en 1997 dans le Jura. Derrière chaque commande, des hommes et des femmes qui sélectionnent et affinent les meilleurs fromages de la région depuis plus de vingt-cinq ans.</p>
+      <a href="https://fromagerie-benoit.com" class="fil-a reveal d2" target="_blank" rel="noopener noreferrer">Découvrir la Fromagerie Benoit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-top">
+      <div>
+        <a href="#" class="logo"><span class="logo-j">JURA</span><span class="logo-c">COMTÉ</span></a>
+        <p class="foot-tagline">Fromages AOP du Jura, directement livrés depuis 1997.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#histoire">Notre histoire</a></li>
+          <li><a href="#fromages">Nos fromages</a></li>
+          <li><a href="#clients">Nos clients</a></li>
+          <li><a href="#engagements">Engagements</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Nous contacter</h4>
+        <ul>
+          <li><button onclick="openPanel('ce')">Comités d'Entreprise</button></li>
+          <li><button onclick="openPanel('pro')">Professionnels</button></li>
+          <li><button onclick="openPanel('ape')">APE</button></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Maison mère</h4>
+        <ul>
+          <li><a href="https://fromagerie-benoit.com" target="_blank" rel="noopener">Fromagerie Benoit</a></li>
+          <li><a href="mailto:contact@jura-comte.com">contact@jura-comte.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span class="foot-copy">© 2026 Jura Comté · Filiale de la Fromagerie Benoit</span>
+      <span class="foot-sub">Tous droits réservés</span>
+    </div>
+  </div>
+</footer>
+
+<!-- PANEL CE -->
+<div class="ov" id="ov-ce">
+  <div class="ov-bg" onclick="closePanel('ce')"></div>
+  <div class="panel">
+    <div class="pan-head">
+      <div><div class="pan-title">Comités d'Entreprise</div><div class="pan-sub">Tarifs employés, ventes régulières, livraison sur site</div></div>
+      <button class="pan-x" onclick="closePanel('ce')" aria-label="Fermer">✕</button>
+    </div>
+    <form action="mailto:contact@jura-comte.com" method="post" enctype="text/plain">
+      <div class="fg-row">
+        <div class="fg"><label>Prénom</label><input type="text" name="prenom" placeholder="Votre prénom" required></div>
+        <div class="fg"><label>Nom</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+      </div>
+      <div class="fg"><label>Entreprise / CE</label><input type="text" name="entreprise" placeholder="Nom de l'entreprise ou du CE" required></div>
+      <div class="fg-row">
+        <div class="fg"><label>Email</label><input type="email" name="email" placeholder="vous@entreprise.fr" required></div>
+        <div class="fg"><label>Téléphone</label><input type="tel" name="telephone" placeholder="06 XX XX XX XX"></div>
+      </div>
+      <div class="fg"><label>Message</label><textarea name="message" placeholder="Type de commande, quantité, échéance…" required></textarea></div>
+      <button type="submit" class="fg-submit">Envoyer la demande</button>
+    </form>
+  </div>
+</div>
+
+<!-- PANEL PRO -->
+<div class="ov" id="ov-pro">
+  <div class="ov-bg" onclick="closePanel('pro')"></div>
+  <div class="panel">
+    <div class="pan-head">
+      <div><div class="pan-title">Professionnels</div><div class="pan-sub">Restaurateurs, traiteurs, épiceries fines</div></div>
+      <button class="pan-x" onclick="closePanel('pro')" aria-label="Fermer">✕</button>
+    </div>
+    <form action="mailto:contact@jura-comte.com" method="post" enctype="text/plain">
+      <div class="fg-row">
+        <div class="fg"><label>Prénom</label><input type="text" name="prenom" placeholder="Votre prénom" required></div>
+        <div class="fg"><label>Nom</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+      </div>
+      <div class="fg"><label>Raison sociale</label><input type="text" name="raison_sociale" placeholder="Nom de l'établissement" required></div>
+      <div class="fg">
+        <label>Type d'activité</label>
+        <select name="activite">
+          <option value="">Sélectionner…</option>
+          <option>Restaurateur</option>
+          <option>Traiteur</option>
+          <option>Épicerie fine</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="fg-row">
+        <div class="fg"><label>Email</label><input type="email" name="email" placeholder="contact@etablissement.fr" required></div>
+        <div class="fg"><label>Téléphone</label><input type="tel" name="telephone" placeholder="06 XX XX XX XX"></div>
+      </div>
+      <div class="fg"><label>Message</label><textarea name="message" placeholder="Besoin, fréquence de commande, volumes…"></textarea></div>
+      <button type="submit" class="fg-submit">Demander le catalogue pro</button>
+    </form>
+  </div>
+</div>
+
+<!-- PANEL APE -->
+<div class="ov" id="ov-ape">
+  <div class="ov-bg" onclick="closePanel('ape')"></div>
+  <div class="panel">
+    <div class="pan-head">
+      <div><div class="pan-title">Associations de Parents</div><div class="pan-sub">Ventes organisées clé en main</div></div>
+      <button class="pan-x" onclick="closePanel('ape')" aria-label="Fermer">✕</button>
+    </div>
+    <form action="mailto:contact@jura-comte.com" method="post" enctype="text/plain">
+      <div class="fg-row">
+        <div class="fg"><label>Prénom</label><input type="text" name="prenom" placeholder="Votre prénom" required></div>
+        <div class="fg"><label>Nom</label><input type="text" name="nom" placeholder="Votre nom" required></div>
+      </div>
+      <div class="fg"><label>École / Association</label><input type="text" name="ecole" placeholder="Nom de l'école ou de l'association" required></div>
+      <div class="fg"><label>Email</label><input type="email" name="email" placeholder="contact@association.fr" required></div>
+      <div class="fg"><label>Date envisagée</label><input type="date" name="date"></div>
+      <div class="fg"><label>Message</label><textarea name="message" placeholder="Événement, nombre de familles, période souhaitée…"></textarea></div>
+      <button type="submit" class="fg-submit">Organiser ma vente</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  // Hero Ken Burns
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.getElementById('hero-bg').classList.add('go');
+  }));
+
+  // Hamburger
+  const ham = document.getElementById('ham');
+  const navLinks = document.getElementById('nav-links');
+  ham.addEventListener('click', () => navLinks.classList.toggle('on'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('on')));
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Panels
+  function openPanel(id) {
+    document.querySelectorAll('.ov.on').forEach(o => o.classList.remove('on'));
+    const el = document.getElementById('ov-' + id);
+    if (el) { el.classList.add('on'); document.body.style.overflow = 'hidden'; }
+  }
+  function closePanel(id) {
+    const el = document.getElementById('ov-' + id);
+    if (el) { el.classList.remove('on'); document.body.style.overflow = ''; }
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.ov.on').forEach(o => o.classList.remove('on'));
+    document.body.style.overflow = '';
+  });
+</script>
 </body>
 </html>
