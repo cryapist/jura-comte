@@ -8,5 +8,8 @@
         "includeFiles": ["*.webp", "*.html"]
       }
     }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/server.js" }
   ]
 }
